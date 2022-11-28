@@ -31,7 +31,7 @@ const studentSchema = new mongoose.Schema<IStudent>(
       required: [true, 'Student must has an username'],
       unique: true,
     },
-    
+
     password: {
       type: String,
       required: [true, 'Student must has a password'],
@@ -96,6 +96,7 @@ studentSchema.methods.createJWT = async function (): Promise<string> {
       mssv: this.mssv,
       class: this.class,
       roles: this.roles,
+      _id: this._id,
     },
     process.env.JWT_SECRET,
     { expiresIn: '30d' }
