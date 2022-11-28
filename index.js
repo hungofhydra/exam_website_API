@@ -7,6 +7,7 @@ import rateLimiter from 'express-rate-limit';
 import 'express-async-errors';
 import mongoose from 'mongoose';
 import { errorHandler, notFound } from './middlewares/index.js';
+import { authRouter } from './routes/index.js';
 const PORT = process.env.PORT || 5000;
 const app = express();
 app.set('trust proxy', 1);
@@ -17,9 +18,7 @@ app.use(rateLimiter({
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors());
-app.use('/api/v1/', (req, res) => {
-    res.status(200).json('Hello World');
-});
+app.use('/api/v1/auth', authRouter);
 app.use(errorHandler);
 app.use(notFound);
 const start = async () => {
