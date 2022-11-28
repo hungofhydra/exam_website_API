@@ -36,6 +36,21 @@ const studentSchema = new mongoose.Schema({
     },
     roles: {
         type: [String],
+        default: ['Student'],
+        required: true,
+    },
+    examScore: {
+        type: [
+            {
+                examId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'Exam',
+                },
+                score: {
+                    type: Number,
+                },
+            },
+        ],
     },
 }, { timestamps: true });
 studentSchema.methods.createJWT = async function () {
