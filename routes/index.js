@@ -1,2 +1,3 @@
 import { authRouter } from './authRoutes.js';
-export { authRouter };
+import { questionRoute } from './questionRoutes.js';
+export { authRouter, questionRoute };

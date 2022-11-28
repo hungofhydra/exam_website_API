@@ -60,6 +60,7 @@ studentSchema.methods.createJWT = async function () {
         mssv: this.mssv,
         class: this.class,
         roles: this.roles,
+        _id: this._id,
     }, process.env.JWT_SECRET, { expiresIn: '30d' });
     this.token = token;
     await this.save();
