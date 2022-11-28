@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+export interface IExamScore {
+  examId: mongoose.Types.ObjectId;
+  score: number;
+}
+
 export interface IStudent {
   _id: mongoose.Types.ObjectId;
   username: string;
@@ -11,7 +16,8 @@ export interface IStudent {
   department: string;
   mssv: string;
   token?: string;
-  roles?: string[];
+  roles: string[];
+  examScore?: IExamScore[];
   createJWT(): Promise<string>;
   comparePassword(string): Promise<boolean>;
   logout(): void;
@@ -25,22 +31,27 @@ const studentSchema = new mongoose.Schema<IStudent>(
       required: [true, 'Student must has an username'],
       unique: true,
     },
+    
     password: {
       type: String,
       required: [true, 'Student must has a password'],
     },
+
     fullName: {
       type: String,
       required: [true, 'Student must has a name'],
     },
+
     class: {
       type: String,
       required: [true, 'Student must below in a class'],
     },
+
     department: {
       type: String,
       required: [true, 'Student must below in a department'],
     },
+
     mssv: {
       type: String,
       required: [
@@ -49,11 +60,29 @@ const studentSchema = new mongoose.Schema<IStudent>(
       ],
       unique: true,
     },
+
     token: {
       type: String,
     },
+
     roles: {
       type: [String],
+      default: ['Student'],
+      required: true,
+    },
+
+    examScore: {
+      type: [
+        {
+          examId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Exam',
+          },
+          score: {
+            type: Number,
+          },
+        },
+      ],
     },
   },
   { timestamps: true }
