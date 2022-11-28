@@ -5,7 +5,7 @@ import { createError } from '../errors/createError.js';
 export const createNewStudentAccountService = async (studentData) => {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(studentData.password, salt);
-    const newStudent = await Student.create(Object.assign(Object.assign({}, studentData), { password: hashedPassword }));
+    const newStudent = await Student.create(Object.assign(Object.assign({}, studentData), { password: hashedPassword, roles: ['Student'] }));
     if (!newStudent)
         throw createError(StatusCodes.INTERNAL_SERVER_ERROR, getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR));
     const token = await newStudent.createJWT();

@@ -11,6 +11,7 @@ export interface IStudent {
   department: string;
   mssv: string;
   token?: string;
+  roles?: string[];
   createJWT(): Promise<string>;
   comparePassword(string): Promise<boolean>;
   logout(): void;
@@ -51,6 +52,9 @@ const studentSchema = new mongoose.Schema<IStudent>(
     token: {
       type: String,
     },
+    roles: {
+      type: [String],
+    },
   },
   { timestamps: true }
 );
@@ -62,6 +66,7 @@ studentSchema.methods.createJWT = async function (): Promise<string> {
       fullName: this.fullName,
       mssv: this.mssv,
       class: this.class,
+      roles: this.roles,
     },
     process.env.JWT_SECRET,
     { expiresIn: '30d' }

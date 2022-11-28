@@ -34,6 +34,9 @@ const studentSchema = new mongoose.Schema({
     token: {
         type: String,
     },
+    roles: {
+        type: [String],
+    },
 }, { timestamps: true });
 studentSchema.methods.createJWT = async function () {
     const token = jwt.sign({
@@ -41,6 +44,7 @@ studentSchema.methods.createJWT = async function () {
         fullName: this.fullName,
         mssv: this.mssv,
         class: this.class,
+        roles: this.roles,
     }, process.env.JWT_SECRET, { expiresIn: '30d' });
     this.token = token;
     await this.save();

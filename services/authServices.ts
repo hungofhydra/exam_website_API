@@ -13,6 +13,7 @@ export const createNewStudentAccountService = async (
   const newStudent = await Student.create({
     ...studentData,
     password: hashedPassword,
+    roles: ['Student'],
   });
 
   if (!newStudent)
