@@ -24,7 +24,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.7.3",
     "node-xlsx": "^0.21.0",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "typescript": "^4.9.3"
