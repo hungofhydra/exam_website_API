@@ -68,3 +68,46 @@ export const getAllExamService = async () => {
   const exams: IExam[] = await Exam.find().select('-questions');
   return exams;
 };
+
+export const inputExamScoreService = async (
+  examId: string,
+  score: number,
+  studentId: string
+) => {
+  const exam = await Exam.findById(examId);
+  if (!exam)
+    throw createError(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
+    );
+
+  const currentTime = new Date();
+  if (currentTime > exam.endDate)
+    throw createError(
+      StatusCodes.UNAUTHORIZED,
+      'The exam has already closed, cannot update score'
+    );
+
+  const student = await Student.findById(studentId);
+  if (!student)
+    throw createError(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR)
+    );
+
+  const isDuplicated = student.examScore.find(
+    (o) => o.examId.toString() === examId
+  );
+  if (isDuplicated)
+    throw createError(
+      StatusCodes.UNAUTHORIZED,
+      'This student already had score in this test.'
+    );
+
+  student.examScore.push({
+    examId: new mongoose.Types.ObjectId(examId),
+    score,
+  });
+  await student.save();
+  return student.examScore;
+};
