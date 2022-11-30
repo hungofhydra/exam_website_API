@@ -1,4 +1,5 @@
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
+import mongoose from 'mongoose';
 import dateFormat from 'dateformat';
 import { createError } from '../errors/createError.js';
 import Exam from '../models/Exam.js';
@@ -44,4 +45,21 @@ export const createNewExamService = async (examData) => {
 export const getAllExamService = async () => {
     const exams = await Exam.find().select('-questions');
     return exams;
+};
+export const inputExamScoreService = async (examId, score, studentId) => {
+    const exam = await Exam.findById(examId);
+    if (!exam)
+        throw createError(StatusCodes.INTERNAL_SERVER_ERROR, getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR));
+    const currentTime = new Date();
+    if (currentTime > exam.endDate)
+        throw createError(StatusCodes.UNAUTHORIZED, 'The exam has already closed, cannot update score');
+    const student = await Student.findById(studentId);
+    if (!student)
+        throw createError(StatusCodes.INTERNAL_SERVER_ERROR, getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR));
+    student.examScore.push({
+        examId: new mongoose.Types.ObjectId(examId),
+        score,
+    });
+    await student.save();
+    return student.examScore;
 };

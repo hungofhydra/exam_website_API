@@ -7,7 +7,7 @@ import rateLimiter from 'express-rate-limit';
 import 'express-async-errors';
 import mongoose from 'mongoose';
 import { errorHandler, notFound } from './middlewares/index.js';
-import { authRouter, examRoute, questionRoute } from './routes/index.js';
+import { authRouter, examRoute, questionRoute, studentRoute, } from './routes/index.js';
 const PORT = process.env.PORT || 5000;
 const app = express();
 app.set('trust proxy', 1);
@@ -21,6 +21,7 @@ app.use(cors());
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/question', questionRoute);
 app.use('/api/v1/exam', examRoute);
+app.use('/api/v1/student', studentRoute);
 app.use(errorHandler);
 app.use(notFound);
 const start = async () => {
