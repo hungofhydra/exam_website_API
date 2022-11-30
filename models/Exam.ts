@@ -7,7 +7,8 @@ export interface IExam {
   numberOfQuestion: number;
   duration: number;
   isCustom: boolean;
-  questions: [mongoose.Types.ObjectId];
+  questions?: mongoose.Types.ObjectId[];
+  populate(string);
 }
 
 const examSchema = new mongoose.Schema<IExam>(
