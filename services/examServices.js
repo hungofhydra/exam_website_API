@@ -56,6 +56,9 @@ export const inputExamScoreService = async (examId, score, studentId) => {
     const student = await Student.findById(studentId);
     if (!student)
         throw createError(StatusCodes.INTERNAL_SERVER_ERROR, getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR));
+    const isDuplicated = student.examScore.find((o) => o.examId.toString() === examId);
+    if (isDuplicated)
+        throw createError(StatusCodes.UNAUTHORIZED, 'This student already had score in this test.');
     student.examScore.push({
         examId: new mongoose.Types.ObjectId(examId),
         score,
