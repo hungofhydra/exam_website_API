@@ -3,7 +3,6 @@ dotenv.config();
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import rateLimiter from 'express-rate-limit';
 import 'express-async-errors';
 import mongoose from 'mongoose';
 
@@ -19,12 +18,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 app.set('trust proxy', 1);
-app.use(
-  rateLimiter({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100,
-  })
-);
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors());

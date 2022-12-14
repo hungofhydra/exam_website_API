@@ -3,7 +3,6 @@ dotenv.config();
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import rateLimiter from 'express-rate-limit';
 import 'express-async-errors';
 import mongoose from 'mongoose';
 import { errorHandler, notFound } from './middlewares/index.js';
@@ -11,10 +10,7 @@ import { authRouter, examRoute, questionRoute, studentRoute, } from './routes/in
 const PORT = process.env.PORT || 5000;
 const app = express();
 app.set('trust proxy', 1);
-app.use(rateLimiter({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-}));
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors());
